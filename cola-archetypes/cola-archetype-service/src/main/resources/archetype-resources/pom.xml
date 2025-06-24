@@ -27,7 +27,7 @@
         <module>${rootArtifactId}-app</module>
         <module>${rootArtifactId}-domain</module>
         <module>${rootArtifactId}-infrastructure</module>
-        <module>start</module>
+        <module>${rootArtifactId}-start</module>
     </modules>
 
     <dependencies>

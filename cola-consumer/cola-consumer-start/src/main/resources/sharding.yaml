@@ -1,0 +1,62 @@
+mode:
+  type: Standalone
+  repository:
+    type: JDBC
+
+dataSources:
+  ds_0:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.78.201:3306/tb_order?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  ds_1:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.78.201:3307/tb_order?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+
+
+rules:
+  - !SHARDING
+    tables:
+      sharding_order:
+        actualDataNodes: ds.sharding_order_${0..1}
+        databaseStrategy: # 分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
+          none:
+          # standard: # 用于单分片键的标准分片场景
+          #   shardingColumn: sharding_key
+          #   shardingAlgorithmName: database_inline
+        tableStrategy:
+          standard:
+            shardingColumn: store_id
+            shardingAlgorithmName: table_inline
+    shardingAlgorithms:
+#       database_inline: # 分库策略
+#         type: CLASS_BASED
+#         props:
+#           strategy: STANDARD
+#           algorithmClassName: com.base.strategy.StandardDbPreciseStandardShardingAlgorithm
+      table_inline: # 分表策略
+        type: INLINE
+        props:
+          # strategy: STANDARD
+          algorithm-expression: sharding_order_$->{store_id % 2}
+  - !READWRITE_SPLITTING
+    dataSourceGroups:
+      ds:
+        writeDataSourceName: ds_0
+        readDataSourceNames:
+          - ds_1
+        loadBalancerName: round-robin
+    loadBalancers:
+      round-robin:
+        type: RANDOM
+
+props:
+  sql-show: true
+
+transaction:
+  defaultType: BASE
+  providerType: Seata

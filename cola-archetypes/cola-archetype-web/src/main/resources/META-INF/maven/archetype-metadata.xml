@@ -107,7 +107,7 @@
             </fileSets>
         </module>
 
-        <module id="start" dir="start" name="start">
+        <module id="${rootArtifactId}-start" dir="__rootArtifactId__-start" name="${rootArtifactId}-start">
             <fileSets>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">
                     <directory>src/main/java</directory>
@@ -118,6 +118,7 @@
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/resources</directory>
                     <includes>
+                        <include>**/*.yml</include>
                         <include>**/*.xml</include>
                         <include>**/*.properties</include>
                     </includes>
