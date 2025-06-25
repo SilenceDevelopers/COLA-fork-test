@@ -5,7 +5,6 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
@@ -34,7 +33,7 @@ public class SocketIOConfig {
 
     private String[] namespaces;
 
-    @Bean
+//    @Bean
     public SocketIOServer socketIOServer() {
         SocketConfig socketConfig = new SocketConfig();
         socketConfig.setTcpNoDelay(true);
@@ -49,6 +48,7 @@ public class SocketIOConfig {
         config.setUpgradeTimeout(upgradeTimeout);
         config.setPingTimeout(pingTimeout);
         config.setPingInterval(pingInterval);
+        config.setUseLinuxNativeEpoll(true);
 
         //服务端
         final SocketIOServer server = new SocketIOServer(config);
@@ -60,7 +60,7 @@ public class SocketIOConfig {
         return server;
     }
 
-    @Bean
+//    @Bean
     public SpringAnnotationScanner springAnnotationScanner() {
 
         return new SpringAnnotationScanner(socketIOServer());

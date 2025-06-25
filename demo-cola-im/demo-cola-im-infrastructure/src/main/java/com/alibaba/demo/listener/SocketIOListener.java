@@ -1,7 +1,7 @@
 package com.alibaba.demo.listener;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
-import com.alibaba.demo.handler.SocketIOServiceHandler;
+import com.alibaba.demo.config.IMServer;
 import com.corundumstudio.socketio.SocketIOServer;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -14,29 +14,32 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SocketIOListener implements CommandLineRunner, DisposableBean {
 
-    @Autowired
+//    @Autowired
     private SocketIOServer socketIOServer;
+
+    @Autowired
+    private IMServer imServer;
 
     @Autowired
     private NacosDiscoveryProperties nacosDiscoveryProperties;
 
     @Override
     public void run(String... args) throws Exception {
-        socketIOServer.getNamespace("/test").addListeners(SocketIOServiceHandler.class);
-        socketIOServer.start();
+//        socketIOServer.getNamespace("/test").addListeners(SocketIOServiceHandler.class);
+        imServer.run();
         log.info("================= socket 启动成功 ================");
 //        registerNamingService(socketIOServer.getConfiguration().getContext(), socketIOServer.getConfiguration().getPort());
     }
 
     @Override
     public void destroy() throws Exception {
-        socketIOServer.stop();
+//        socketIOServer.stop();
         log.info("================= socket 关闭成功 =================");
     }
 
     @PreDestroy
     public void shutdown() throws Exception {
-        socketIOServer.stop();
+        imServer.stop();
         log.info("================= socket 关闭成功 =================");
     }
 

@@ -285,6 +285,11 @@
             <!--                <artifactId>HikariCP</artifactId>-->
             <!--                <version>6.2.1</version>-->
             <!--            </dependency>-->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.25.1</version> <!-- 版本可换 -->
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -1,0 +1,24 @@
+syntax = "proto3";
+option java_package = "com.example.protobuf";
+option java_outer_classname = "HelloProto";
+
+message MessageWrapper {
+  string cmd = 1;
+  bytes body = 2;
+}
+
+message LoginRequest {
+  string userId = 1;
+  string token = 2;
+}
+
+message ChatMessage {
+  string fromUserId = 1;
+  string toUserId = 2;
+  string content = 3;
+  int64 timestamp = 4;
+}
+
+message Heartbeat {
+  int64 clientTime = 1;
+}
