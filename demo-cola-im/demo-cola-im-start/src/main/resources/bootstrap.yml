@@ -10,6 +10,7 @@ spring:
       discovery:
         namespace: xhcc #当前命名空间 相当于环境
         group: xunheng-cloud-cola #当前组名 相当于项目
+        register-enabled: false # 禁用默认Web端口注册
       config:
         namespace: xhcc #当前命名空间 相当于环境
         group: xunheng-cloud-cola #当前组名 相当于项目

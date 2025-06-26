@@ -1,7 +1,6 @@
 package com.alibaba.demo.config;
 
 import com.alibaba.demo.handler.NettyServerHandler;
-import com.alibaba.demo.utils.IOUtil;
 import com.example.protobuf.HelloProto;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -18,6 +17,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.util.concurrent.FutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +41,7 @@ public class IMServer {
     private EventLoopGroup workGroup;
     private Class<? extends ServerChannel> serverChannel;
 
+    @Autowired
     private NettyServerHandler nettyServerHandler;
 
     public void run() {
@@ -53,7 +54,7 @@ public class IMServer {
         b.option(ChannelOption.SO_BACKLOG, 128);
         b.childOption(ChannelOption.TCP_NODELAY, true);
         b.childOption(ChannelOption.SO_RCVBUF, 128 * 1024);
-        b.localAddress(new InetSocketAddress(IOUtil.getHostAddress(), port));
+        b.localAddress(new InetSocketAddress("0.0.0.0", port));
         b.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) {
@@ -62,7 +63,7 @@ public class IMServer {
                 pipeline.addLast("protobufDecoder", new ProtobufDecoder(HelloProto.MessageWrapper.getDefaultInstance()));
                 pipeline.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
                 pipeline.addLast("protobufEncoder", new ProtobufEncoder());
-                pipeline.addLast("dispatcher", nettyServerHandler);
+                pipeline.addLast(nettyServerHandler);
             }
         });
         ChannelFuture channelFuture = b.bind().addListener((FutureListener<Void>) future -> {
