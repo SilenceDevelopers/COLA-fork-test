@@ -16,7 +16,7 @@ spring:
         group: xunheng-cloud-cola #当前组名 相当于项目
         file-extension: yml #配置后缀
         shared-configs:
-          - data-id: xunheng-common.yml #公共共享配置
+          - data-id: xunheng-common #公共共享配置
             refresh: true
             group: xunheng-cloud-cola
 #          - data-id: xunheng-datasource.yml #数据源共享配置

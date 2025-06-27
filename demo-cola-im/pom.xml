@@ -290,6 +290,11 @@
                 <artifactId>protobuf-java</artifactId>
                 <version>3.25.1</version> <!-- 版本可换 -->
             </dependency>
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>3.4.2</version> <!-- Use the latest version available -->
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
