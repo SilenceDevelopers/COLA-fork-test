@@ -20,18 +20,14 @@ public class CustomNacosURLLoader implements ShardingSphereURLLoader {
     /**
      * 接收nacos:后的参数sharding.yaml?serverAddr=${nacos.service-address}&namespace=${nacos.namespace}&group=${nacos.group}&username=${nacos.username}&password=${nacos.password}
      *
-     * @param configurationSubject configuration dataId
+     * @param dataId               dataId
      * @param queryProps           url参数，已经解析成为Properties
      * @return
      */
     @Override
     @SneakyThrows
-    public String load(String configurationSubject, Properties queryProps) {
+    public String load(String dataId, Properties queryProps) {
         ConfigService configService = NacosFactory.createConfigService(queryProps);
-        String dataId = configurationSubject;
-        if (dataId.contains(".")){
-            dataId = dataId.substring(0,dataId.indexOf("."));
-        }
         //获取nacos配置
         String config = configService.getConfig(dataId, queryProps.getProperty(Constants.GROUP, Constants.DEFAULT_GROUP), 500);
         Preconditions.checkArgument(config != null, "Nacos config [" + dataId + "] is Empty.");

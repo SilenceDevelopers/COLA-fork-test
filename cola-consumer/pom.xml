@@ -127,6 +127,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>shardingsphere-transaction-base-seata-at</artifactId>
                 <version>${sharding-jdbc.version}</version>
@@ -276,16 +281,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.zaxxer</groupId>-->
-<!--                <artifactId>HikariCP</artifactId>-->
-<!--                <version>6.2.1</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.zaxxer</groupId>-->
+            <!--                <artifactId>HikariCP</artifactId>-->
+            <!--                <version>6.2.1</version>-->
+            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 

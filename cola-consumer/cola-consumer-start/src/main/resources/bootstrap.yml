@@ -12,8 +12,8 @@ spring:
     allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    #url: jdbc:shardingsphere:nacos:sharding.yaml?serverAddr=${nacos.server-address}&namespace=${nacos.namespace}&group=${nacos.group}&username=${nacos.username}&password=${nacos.password}
-    url: jdbc:shardingsphere:classpath:sharding.yaml
+    url: jdbc:shardingsphere:nacos:sharding.yml?serverAddr=${nacos.server-address}&namespace=${nacos.namespace}&group=${nacos.group}&username=${nacos.username}&password=${nacos.password}
+    #url: jdbc:shardingsphere:classpath:sharding.yaml
   cloud:
     nacos:
       username: ${nacos.username}
