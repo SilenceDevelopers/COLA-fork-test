@@ -16,6 +16,7 @@ public class ShardingOrderAssembler {
         order.setOrderName(shardingOrderAddCmd.getOrderName());
         order.setOrderDesc(shardingOrderAddCmd.getOrderDesc());
         order.setOrderPrice(shardingOrderAddCmd.getOrderPrice());
+        order.setStoreId(shardingOrderAddCmd.getStoreId());
         return order;
     }
 

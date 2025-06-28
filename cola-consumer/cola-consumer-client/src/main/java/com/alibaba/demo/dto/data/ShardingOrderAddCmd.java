@@ -12,4 +12,6 @@ public class ShardingOrderAddCmd {
     private String orderDesc;
 
     private BigDecimal orderPrice;
+
+    private Long storeId;
 }
