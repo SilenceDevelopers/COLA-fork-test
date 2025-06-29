@@ -3,9 +3,14 @@ package com.alibaba.demo.shardingorder;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.demo.api.ShardingOrderService;
 import com.alibaba.demo.dto.data.ShardingOrderAddCmd;
+import com.alibaba.demo.dto.data.ShardingOrderESQueryCmd;
 import com.alibaba.demo.dto.data.ShardingOrderListQueryCmd;
+import com.alibaba.demo.dto.page.PageInfo;
+import com.alibaba.demo.dto.vo.ShardingOrderESPageVO;
 import com.alibaba.demo.dto.vo.ShardingOrderListVO;
+import com.alibaba.demo.result.BaseResult;
 import com.alibaba.demo.shardingorder.executor.ShardingOrderAddCmdExe;
+import com.alibaba.demo.shardingorder.executor.query.ShardingOrderESQueryCmdExe;
 import com.alibaba.demo.shardingorder.executor.query.ShardingOrderQueryCmdExe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,9 @@ public class ShardingOrderServiceImpl implements ShardingOrderService {
     @Autowired
     private ShardingOrderQueryCmdExe shardingOrderQueryCmdExe;
 
+    @Autowired
+    private ShardingOrderESQueryCmdExe shardingOrderESQueryCmdExe;
+
     @Override
     public Response add(ShardingOrderAddCmd shardingOrderAddCmd) {
         return shardingOrderAddCmdExe.execute(shardingOrderAddCmd);
@@ -29,5 +37,10 @@ public class ShardingOrderServiceImpl implements ShardingOrderService {
     @Override
     public List<ShardingOrderListVO> getList(ShardingOrderListQueryCmd shardingOrderListQueryCmd) {
         return shardingOrderQueryCmdExe.execute(shardingOrderListQueryCmd);
+    }
+
+    @Override
+    public BaseResult<PageInfo<ShardingOrderESPageVO>> getPage(ShardingOrderESQueryCmd cmd) {
+        return BaseResult.success(shardingOrderESQueryCmdExe.execute(cmd));
     }
 }

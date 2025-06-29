@@ -24,7 +24,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>utf8</charset>
+            <charset>utf-8</charset>
         </encoder>
     </appender>
 
@@ -46,4 +46,21 @@
     <logger name="com.apache.ibatis" level="TRACE" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
+
+    <!-- ES专用日志配置 -->
+    <logger name="org.elasticsearch.client" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APPLICATION"/>
+    </logger>
+
+    <logger name="org.apache.http" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APPLICATION"/>
+    </logger>
+
+    <logger name="co.elastic.clients" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APPLICATION"/>
+    </logger>
+
 </configuration>

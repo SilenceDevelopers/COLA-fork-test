@@ -4,8 +4,12 @@ import cn.hutool.core.lang.Snowflake;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.demo.api.ShardingOrderService;
 import com.alibaba.demo.dto.data.ShardingOrderAddCmd;
+import com.alibaba.demo.dto.data.ShardingOrderESQueryCmd;
 import com.alibaba.demo.dto.data.ShardingOrderListQueryCmd;
+import com.alibaba.demo.dto.page.PageInfo;
+import com.alibaba.demo.dto.vo.ShardingOrderESPageVO;
 import com.alibaba.demo.dto.vo.ShardingOrderListVO;
+import com.alibaba.demo.result.BaseResult;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +40,12 @@ public class ShardingOrderController {
     public List<ShardingOrderListVO> getList(@RequestBody ShardingOrderListQueryCmd cmd) {
         return shardingOrderService.getList(cmd);
     }
+
+    @PostMapping("/getPage")
+    public BaseResult<PageInfo<ShardingOrderESPageVO>> getPage(@RequestBody ShardingOrderESQueryCmd cmd){
+        return shardingOrderService.getPage(cmd);
+    }
+
 
     @PostMapping("/getSnowflakeIds")
     public void getSnowflakeIds() {
