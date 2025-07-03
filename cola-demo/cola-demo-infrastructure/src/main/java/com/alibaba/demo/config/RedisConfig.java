@@ -1,7 +1,5 @@
 package com.alibaba.demo.config;
 
-import org.redisson.Redisson;
-import org.redisson.config.Config;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -33,10 +31,10 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    @Bean
-    public Redisson redissonClient() {
-        Config config = new Config();
-        config.useSingleServer().setAddress("redis://192.168.78.201:6379").setDatabase(0).setPassword("123456");
-        return (Redisson) Redisson.create(config);
-    }
+//    @Bean
+//    public Redisson redissonClient() {
+//        Config config = new Config();
+//        config.useSingleServer().setAddress("redis://192.168.78.201:6379").setDatabase(0).setPassword("123456");
+//        return (Redisson) Redisson.create(config);
+//    }
 }
