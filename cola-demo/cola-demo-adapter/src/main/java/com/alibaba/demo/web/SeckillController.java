@@ -14,7 +14,7 @@ public class SeckillController {
     /**
      * 获取秒杀令牌接口
      */
-    @GetMapping("/token")
+    @PostMapping("/token")
     public String getToken(@RequestParam Long userId, @RequestParam Long productId) {
         return seckillService.tryGetSeckillToken(userId, productId);
     }
