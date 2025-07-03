@@ -1,0 +1,37 @@
+spring:
+  data:
+    redis:
+      cluster:
+        nodes:
+          - 192.168.78.201:6379
+          - 192.168.78.201:6380
+          - 192.168.78.201:6381
+          - 192.168.78.201:6382
+          - 192.168.78.201:6383
+          - 192.168.78.201:6384
+        max-redirects: 3
+      password: 123456
+      timeout: 10s
+      lettuce:
+        pool:
+          max-active: 200
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 0
+        cluster:
+          refresh:
+            adaptive: true
+            period: 2000
+
+redisson:
+  cluster-servers-config:
+    node-addresses:
+      - redis://192.168.78.201:6379
+      - redis://192.168.78.201:6380
+      - redis://192.168.78.201:6381
+      - redis://192.168.78.201:6382
+      - redis://192.168.78.201:6383
+      - redis://192.168.78.201:6384
+    scan-interval: 2000
+    password: 123456
+
