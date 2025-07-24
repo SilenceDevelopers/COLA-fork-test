@@ -7,8 +7,8 @@ import com.google.protobuf.Parser;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class MessageDispatcher implements ApplicationContextAware {
+public class MessageDispatcher implements ApplicationListener<ContextRefreshedEvent> {
 
     private final Map<String, MessageHandler<?>> handlers = new HashMap<>();
     private final Map<String, Parser<?>> parserMap = new HashMap<>();
@@ -38,8 +38,8 @@ public class MessageDispatcher implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        Map<String, Object> beans = applicationContext.getBeansWithAnnotation(MsgHandler.class);
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) throws BeansException {
+        Map<String, Object> beans = contextRefreshedEvent.getApplicationContext().getBeansWithAnnotation(MsgHandler.class);
         for (Object bean : beans.values()) {
             MsgHandler annotation = bean.getClass().getAnnotation(MsgHandler.class);
             String cmd = annotation.cmd();
