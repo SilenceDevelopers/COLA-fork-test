@@ -20,7 +20,8 @@ import java.util.Map;
 public class MessageDispatcher implements ApplicationListener<ContextRefreshedEvent> {
 
     private final Map<String, MessageHandler<?>> handlers = new HashMap<>();
-    private final Map<String, Parser<?>> parserMap = new HashMap<>();
+    private final static Map<String, Parser<?>> parserMap = new HashMap<>();
+    private static final Map<Class<?>, String> typeToCmdMap = new HashMap<>();
 
     public void dispatch(ChannelHandlerContext ctx, HelloProto.MessageWrapper wrapper) throws Exception {
         String cmd = wrapper.getCmd();
@@ -29,6 +30,8 @@ public class MessageDispatcher implements ApplicationListener<ContextRefreshedEv
         if (parser != null && handler != null) {
             Object message = parser.parseFrom(wrapper.getBody());
             invokeHandler(ctx, handler, message);
+        } else {
+            log.warn("未知的消息类型：{}", cmd);
         }
     }
 
@@ -51,9 +54,18 @@ public class MessageDispatcher implements ApplicationListener<ContextRefreshedEv
 
                 handlers.put(cmd, (MessageHandler<?>) bean);
                 parserMap.put(cmd, parser);
+                typeToCmdMap.put(msgClass, cmd);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to get parser for: " + msgClass.getName(), e);
             }
         }
+    }
+
+    public static Map<String, Parser<?>> getParserMap() {
+        return parserMap;
+    }
+
+    public static String getCmd(Class<?> clazz) {
+        return typeToCmdMap.get(clazz);
     }
 }

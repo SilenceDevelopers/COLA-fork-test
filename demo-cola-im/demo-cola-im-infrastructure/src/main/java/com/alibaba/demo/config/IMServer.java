@@ -1,6 +1,12 @@
 package com.alibaba.demo.config;
 
+import com.alibaba.demo.constant.Constants;
 import com.alibaba.demo.handler.NettyServerHandler;
+import com.alibaba.demo.utils.IOUtil;
+import com.alibaba.demo.utils.NodeUtil;
+import com.alibaba.demo.zookeeper.ServerNode;
+import com.alibaba.demo.zookeeper.ServerWorker;
+import com.alibaba.demo.zookeeper.ZKService;
 import com.example.protobuf.HelloProto;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -30,11 +36,8 @@ import java.net.InetSocketAddress;
 public class IMServer {
 
     private int port;
-
     private boolean useLinuxNativeEpoll;
-
     private int bossCount;
-
     private int workCount;
 
     private EventLoopGroup bossGroup;
@@ -43,6 +46,9 @@ public class IMServer {
 
     @Autowired
     private NettyServerHandler nettyServerHandler;
+
+    @Autowired
+    private ZKService zkService;
 
     public void run() {
         initGroup();
@@ -69,6 +75,14 @@ public class IMServer {
         ChannelFuture channelFuture = b.bind().addListener((FutureListener<Void>) future -> {
             if (future.isSuccess()) {
                 log.info("SocketIO server started at port: {}", port);
+                if (!zkService.checkNodeExists(Constants.MANAGE_PATH)){
+                    zkService.createPersistentNode(Constants.MANAGE_PATH);
+                }
+                ServerNode serverNode = new ServerNode(IOUtil.getHostAddress(), port);
+                String pathRegistered = zkService.createNode(Constants.PATH_PREFIX,serverNode);
+                serverNode.setId(NodeUtil.getIdByPath(pathRegistered,Constants.PATH_PREFIX));
+                log.info("本地节点, path={}, id={}", pathRegistered, serverNode.getId());
+                ServerWorker.instance().setServerNode(serverNode);
             } else {
                 log.error("SocketIO server start failed at port: {}!", port);
             }
