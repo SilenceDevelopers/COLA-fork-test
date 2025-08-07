@@ -1,5 +1,6 @@
 package com.alibaba.demo.annotation;
 
+import com.alibaba.demo.enums.CmdEnum;
 import com.google.protobuf.MessageLite;
 
 import java.lang.annotation.ElementType;
@@ -11,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MsgHandler {
 
-    String cmd();
+    CmdEnum cmd();
 
     Class<? extends MessageLite> message();
 }

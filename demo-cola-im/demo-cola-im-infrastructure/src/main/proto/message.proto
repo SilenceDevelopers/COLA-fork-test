@@ -2,6 +2,14 @@ syntax = "proto3";
 option java_package = "com.example.protobuf";
 option java_outer_classname = "HelloProto";
 
+enum Cmd{
+  UNKNOWN = 0;
+  HEARTBEAT = 1;
+  LOGIN = 2;
+  CHAT = 3;
+  CONNECTED = 4;
+}
+
 message MessageWrapper {
   string cmd = 1;
   bytes body = 2;

@@ -1,6 +1,7 @@
 package com.alibaba.demo.handler;
 
 import com.alibaba.demo.annotation.MsgHandler;
+import com.alibaba.demo.enums.CmdEnum;
 import com.example.protobuf.HelloProto;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
@@ -21,7 +22,6 @@ public class MessageDispatcher implements ApplicationListener<ContextRefreshedEv
 
     private final Map<String, MessageHandler<?>> handlers = new HashMap<>();
     private final static Map<String, Parser<?>> parserMap = new HashMap<>();
-    private static final Map<Class<?>, String> typeToCmdMap = new HashMap<>();
 
     public void dispatch(ChannelHandlerContext ctx, HelloProto.MessageWrapper wrapper) throws Exception {
         String cmd = wrapper.getCmd();
@@ -45,27 +45,19 @@ public class MessageDispatcher implements ApplicationListener<ContextRefreshedEv
         Map<String, Object> beans = contextRefreshedEvent.getApplicationContext().getBeansWithAnnotation(MsgHandler.class);
         for (Object bean : beans.values()) {
             MsgHandler annotation = bean.getClass().getAnnotation(MsgHandler.class);
-            String cmd = annotation.cmd();
+            CmdEnum cmd = annotation.cmd();
             Class<? extends MessageLite> msgClass = annotation.message();
 
             try {
                 Method method = msgClass.getDeclaredMethod("parser");
                 Parser<?> parser = (Parser<?>) method.invoke(null);
 
-                handlers.put(cmd, (MessageHandler<?>) bean);
-                parserMap.put(cmd, parser);
-                typeToCmdMap.put(msgClass, cmd);
+                handlers.put(cmd.getName(), (MessageHandler<?>) bean);
+                parserMap.put(cmd.getName(), parser);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to get parser for: " + msgClass.getName(), e);
             }
         }
     }
 
-    public static Map<String, Parser<?>> getParserMap() {
-        return parserMap;
-    }
-
-    public static String getCmd(Class<?> clazz) {
-        return typeToCmdMap.get(clazz);
-    }
 }
