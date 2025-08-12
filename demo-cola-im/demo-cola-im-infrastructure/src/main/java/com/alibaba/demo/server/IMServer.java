@@ -1,13 +1,22 @@
-package com.alibaba.demo.config;
+package com.alibaba.demo.server;
 
 import com.alibaba.demo.constant.Constants;
 import com.alibaba.demo.handler.NettyServerHandler;
+import com.alibaba.demo.monitor.NettyDirectMemoryMetrics;
 import com.alibaba.demo.utils.IOUtil;
 import com.alibaba.demo.utils.NodeUtil;
 import com.alibaba.demo.zookeeper.ServerNode;
+import com.alibaba.demo.zookeeper.ServerRouterWorker;
 import com.alibaba.demo.zookeeper.ServerWorker;
 import com.alibaba.demo.zookeeper.ZKService;
 import com.example.protobuf.HelloProto;
+import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
+import io.micrometer.prometheus.PrometheusConfig;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -50,6 +59,11 @@ public class IMServer {
     @Autowired
     private ZKService zkService;
 
+    @Autowired
+    private NettyDirectMemoryMetrics nettyDirectMemoryMetrics;
+
+    private PrometheusMeterRegistry prometheusRegistry;
+
     public void run() {
         initGroup();
         ServerBootstrap b = new ServerBootstrap();
@@ -75,14 +89,17 @@ public class IMServer {
         ChannelFuture channelFuture = b.bind().addListener((FutureListener<Void>) future -> {
             if (future.isSuccess()) {
                 log.info("SocketIO server started at port: {}", port);
-                if (!zkService.checkNodeExists(Constants.MANAGE_PATH)){
+                if (!zkService.checkNodeExists(Constants.MANAGE_PATH)) {
                     zkService.createPersistentNode(Constants.MANAGE_PATH);
                 }
                 ServerNode serverNode = new ServerNode(IOUtil.getHostAddress(), port);
-                String pathRegistered = zkService.createNode(Constants.PATH_PREFIX,serverNode);
-                serverNode.setId(NodeUtil.getIdByPath(pathRegistered,Constants.PATH_PREFIX));
+                String pathRegistered = zkService.createNode(Constants.PATH_PREFIX, serverNode);
+                serverNode.setId(NodeUtil.getIdByPath(pathRegistered, Constants.PATH_PREFIX));
                 log.info("本地节点, path={}, id={}", pathRegistered, serverNode.getId());
                 ServerWorker.instance().setServerNode(serverNode);
+                ServerRouterWorker.instance().init();
+                exposure();
+                nettyDirectMemoryMetrics.init();
             } else {
                 log.error("SocketIO server start failed at port: {}!", port);
             }
@@ -104,5 +121,26 @@ public class IMServer {
     public void stop() {
         bossGroup.shutdownGracefully().syncUninterruptibly();
         workGroup.shutdownGracefully().syncUninterruptibly();
+    }
+
+    private void exposure(){
+        // Netty启动完成后，创建PrometheusMeterRegistry并绑定指标
+        prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        bindJvmMetrics(prometheusRegistry);
+        try {
+            // 启动用于暴露指标的HTTP服务
+            new PrometheusHttpServer(prometheusRegistry).start(9090);
+        } catch (InterruptedException e) {
+            log.error("Http Server start error, message:{}",e.getMessage());
+        }
+    }
+
+    private void bindJvmMetrics(PrometheusMeterRegistry registry) {
+        new ClassLoaderMetrics().bindTo(registry);
+        new JvmMemoryMetrics().bindTo(registry);
+        new JvmGcMetrics().bindTo(registry);
+        new ProcessorMetrics().bindTo(registry);
+        new JvmThreadMetrics().bindTo(registry);
+        log.info("JVM metrics bound to PrometheusMeterRegistry");
     }
 }

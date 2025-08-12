@@ -1,7 +1,7 @@
 package com.alibaba.demo.listener;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
-import com.alibaba.demo.config.IMServer;
+import com.alibaba.demo.server.IMServer;
 import com.alibaba.demo.utils.IOUtil;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;

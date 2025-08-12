@@ -1,6 +1,6 @@
 package com.alibaba.demo.zookeeper;
 
-import com.alibaba.demo.utils.SpringContextUtil;
+import com.alibaba.demo.utils.SpringContextUtils;
 import org.apache.curator.framework.CuratorFramework;
 
 public class CuratorZKClient {
@@ -9,7 +9,7 @@ public class CuratorZKClient {
     {
         if (null == singleton)
         {
-            singleton = SpringContextUtil.getBean(CuratorFramework.class);
+            singleton = SpringContextUtils.getBean(CuratorFramework.class);
         }
         return singleton;
     }
