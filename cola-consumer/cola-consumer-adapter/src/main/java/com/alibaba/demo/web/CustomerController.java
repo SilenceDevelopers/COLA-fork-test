@@ -2,6 +2,8 @@ package com.alibaba.demo.web;
 
 import com.alibaba.cola.dto.MultiResponse;
 import com.alibaba.cola.dto.Response;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.demo.api.CustomerServiceI;
 import com.alibaba.demo.dto.CustomerAddCmd;
 import com.alibaba.demo.dto.CustomerListByNameQry;
@@ -20,9 +22,14 @@ public class CustomerController {
     //@DubboReference
     private ProviderApi providerApi;
 
+    @SentinelResource(value = "helloWorldResource", blockHandler = "helloWorldBlock")
     @GetMapping(value = "/helloworld")
     public String helloWorld() {
         return "Hello, welcome to COLA world!";
+    }
+
+    public String helloWorldBlock(BlockException exception) {
+        return "Request blocked：" + exception.getClass().getSimpleName();
     }
 
     @GetMapping(value = "/customer")
@@ -38,7 +45,12 @@ public class CustomerController {
     }
 
     @PostMapping("/getConsumerRes")
-    public String getConsumerRes(){
+    public String getConsumerRes() {
         return providerApi.sayProviderHello();
+    }
+
+    @GetMapping("/test")
+    public Integer test(){
+        return 1/0;
     }
 }

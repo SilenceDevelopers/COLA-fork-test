@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface DisruptorHandler {
 
-    int order() default 0;
-    boolean parallel() default false;
+    int order() default 0;  //数值越小，优先级越高
+    boolean parallel() default false;   //同order内是否并行
 }

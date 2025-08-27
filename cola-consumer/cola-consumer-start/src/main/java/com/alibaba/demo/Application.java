@@ -4,7 +4,6 @@ import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /**
  * Spring Boot Starter
@@ -14,7 +13,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @SpringBootApplication(scanBasePackages = {"com.alibaba.demo", "com.alibaba.cola"})
 @EnableDubbo
 @MapperScan("com.baidu.fsg")
-@EnableElasticsearchRepositories(basePackages = "com.alibaba.demo.es")
+//@EnableElasticsearchRepositories(basePackages = "com.alibaba.demo.es")
 public class Application {
 
     public static void main(String[] args) {

@@ -123,7 +123,10 @@ public class IMServer {
         workGroup.shutdownGracefully().syncUninterruptibly();
     }
 
-    private void exposure(){
+    /**
+     * 在Netty服务中暴露Http端口
+     */
+    private void exposure() {
         // Netty启动完成后，创建PrometheusMeterRegistry并绑定指标
         prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         bindJvmMetrics(prometheusRegistry);
@@ -131,7 +134,7 @@ public class IMServer {
             // 启动用于暴露指标的HTTP服务
             new PrometheusHttpServer(prometheusRegistry).start(9090);
         } catch (InterruptedException e) {
-            log.error("Http Server start error, message:{}",e.getMessage());
+            log.error("Http Server start error, message:{}", e.getMessage());
         }
     }
 
