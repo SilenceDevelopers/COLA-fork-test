@@ -12,12 +12,14 @@ enum Cmd{
 
 message MessageWrapper {
   string cmd = 1;
-  bytes body = 2;
+  int64 userId = 2;
+  int64 clientId = 3;
+  bytes body = 4;
 }
 
 message LoginRequest {
-  string userId = 1;
-  string token = 2;
+  int64 userId = 1;
+  string token = 3;
 }
 
 message ChatMessage {

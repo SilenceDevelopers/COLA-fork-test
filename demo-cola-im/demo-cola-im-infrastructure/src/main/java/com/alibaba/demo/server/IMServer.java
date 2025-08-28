@@ -9,7 +9,6 @@ import com.alibaba.demo.zookeeper.ServerNode;
 import com.alibaba.demo.zookeeper.ServerRouterWorker;
 import com.alibaba.demo.zookeeper.ServerWorker;
 import com.alibaba.demo.zookeeper.ZKService;
-import com.example.protobuf.HelloProto;
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -19,16 +18,14 @@ import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ServerChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.util.concurrent.FutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +61,9 @@ public class IMServer {
 
     private PrometheusMeterRegistry prometheusRegistry;
 
+    @Autowired
+    private IMServerInitializer imServerInitializer;
+
     public void run() {
         initGroup();
         ServerBootstrap b = new ServerBootstrap();
@@ -75,20 +75,10 @@ public class IMServer {
         b.childOption(ChannelOption.TCP_NODELAY, true);
         b.childOption(ChannelOption.SO_RCVBUF, 128 * 1024);
         b.localAddress(new InetSocketAddress("0.0.0.0", port));
-        b.childHandler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            protected void initChannel(SocketChannel ch) {
-                ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-                pipeline.addLast("protobufDecoder", new ProtobufDecoder(HelloProto.MessageWrapper.getDefaultInstance()));
-                pipeline.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
-                pipeline.addLast("protobufEncoder", new ProtobufEncoder());
-                pipeline.addLast(nettyServerHandler);
-            }
-        });
+        b.childHandler(imServerInitializer);
         ChannelFuture channelFuture = b.bind().addListener((FutureListener<Void>) future -> {
             if (future.isSuccess()) {
-                log.info("SocketIO server started at port: {}", port);
+                log.info("IM server started at port: {}", port);
                 if (!zkService.checkNodeExists(Constants.MANAGE_PATH)) {
                     zkService.createPersistentNode(Constants.MANAGE_PATH);
                 }
@@ -101,7 +91,7 @@ public class IMServer {
                 exposure();
                 nettyDirectMemoryMetrics.init();
             } else {
-                log.error("SocketIO server start failed at port: {}!", port);
+                log.error("IM server start failed at port: {}!", port);
             }
         });
     }

@@ -12,6 +12,9 @@ public class LoginHandler implements MessageHandler<HelloProto.LoginRequest> {
 
     @Override
     public void handle(ChannelHandlerContext ctx, HelloProto.LoginRequest msg) {
+        Long userId = msg.getUserId();
+        String token = msg.getToken();
+
         System.out.println("[LOGIN] userId=" + msg.getUserId());
     }
 

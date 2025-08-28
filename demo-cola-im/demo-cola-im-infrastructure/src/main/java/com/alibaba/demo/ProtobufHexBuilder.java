@@ -10,7 +10,7 @@ public class ProtobufHexBuilder {
     public static void main(String[] args) throws Exception {
         // 构建 LoginRequest
         HelloProto.LoginRequest loginRequest = HelloProto.LoginRequest.newBuilder()
-                .setUserId("user123")
+                .setUserId(123L)
                 .setToken("abc123")
                 .build();
 
