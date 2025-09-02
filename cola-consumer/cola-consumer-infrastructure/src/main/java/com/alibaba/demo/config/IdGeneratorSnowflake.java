@@ -16,13 +16,23 @@ import org.springframework.stereotype.Component;
 @Data
 public class IdGeneratorSnowflake {
 
-    private long workerId;  //第几号机房
-    private long datacenterId;  //第几号机器
+    private long workerId;  //第几号机器
+    private long datacenterId;  //第几号机房
     private Snowflake snowflake = IdUtil.getSnowflake(workerId, datacenterId);
 
     @Bean
     public Snowflake snowflake() {
         log.info("雪花算法workerId:" + workerId + ",datacenterId:" + datacenterId);
         return new Snowflake(workerId, datacenterId);
+    }
+
+    @Bean
+    public GeneticSnowflakeIdGenerator geneticSnowflakeIdGenerator(){
+        return new GeneticSnowflakeIdGenerator(workerId);
+    }
+
+    @Bean
+    public SafeGeneticSnowflakeIdGenerator safeGeneticSnowflakeIdGenerator(){
+        return new SafeGeneticSnowflakeIdGenerator(workerId);
     }
 }

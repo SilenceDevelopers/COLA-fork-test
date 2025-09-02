@@ -30,6 +30,7 @@ public class TokenBucketService {
     private static final int REFILL_INTERVAL = 1000;   // 补充间隔ms
     private static final String TOKEN_BLOOM_KEY = "seckill:bloom";
     private static final String TOKEN_SET_KEY = "seckill:used:set";
+    private static final String HASH_TAG = ":{token_group}";
 
     @PostConstruct
     public void init() {
@@ -66,7 +67,7 @@ public class TokenBucketService {
     public void recordToken(String token) {
         redisTemplate.execute(
                 recordBucketScript,
-                Arrays.asList(TOKEN_BLOOM_KEY, TOKEN_SET_KEY),
+                Arrays.asList(TOKEN_BLOOM_KEY + HASH_TAG, TOKEN_SET_KEY + HASH_TAG),
                 token
         );
     }
