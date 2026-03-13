@@ -5,7 +5,9 @@ import com.alibaba.demo.api.CustomerServiceI;
 import com.alibaba.demo.api.StockService;
 import com.alibaba.demo.dto.CustomerListByNameQry;
 import com.alibaba.demo.dto.StockDetailQueryCmd;
+import com.alibaba.demo.dto.StockQuery;
 import com.alibaba.demo.dto.StockReduceCmd;
+import com.alibaba.demo.response.ApiResponse;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +44,10 @@ public class StockController {
     @PostMapping("/reduceStock")
     public Response reduceStock(@RequestBody StockReduceCmd cmd) {
         return stockService.reduceStock(cmd);
+    }
+
+    @PostMapping("/getPage")
+    public ApiResponse getPage(@RequestBody StockQuery stockQuery) {
+        return ApiResponse.success(stockService.getStockPage(stockQuery));
     }
 }

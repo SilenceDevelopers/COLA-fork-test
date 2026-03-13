@@ -21,10 +21,21 @@ public class ZKConfig {
     private Integer maxRetries;
 
     @Bean
-    public CuratorFramework curatorFramework(){
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs,maxRetries);
-        CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(address,retryPolicy);
+    public CuratorFramework curatorFramework() {
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, maxRetries);
+        CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(address, retryPolicy);
         curatorFramework.start();
         return curatorFramework;
+    }
+
+    public static void main(String[] args) {
+        int a = 1;
+        int b = 2;
+        System.out.println(add(a, b));
+
+    }
+
+    public static int add(int a, int b) {
+        return a + b;
     }
 }

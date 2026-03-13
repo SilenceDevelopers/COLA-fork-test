@@ -10,7 +10,7 @@ import org.apache.seata.tm.api.GlobalTransactionContext;
 import org.apache.shardingsphere.transaction.base.seata.at.SeataTransactionHolder;
 
 @Slf4j
-@Activate(group = {DubboConstants.CONSUMER})
+@Activate(group = {DubboConstants.CONSUMER, DubboConstants.PROVIDER})
 public class SeataFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
