@@ -37,6 +37,7 @@
         <sharding-jdbc.version>5.5.1</sharding-jdbc.version>
         <seata.version>2.2.0</seata.version>
         <snakeyaml.version>2.2</snakeyaml.version>
+        <protobuf.version>3.6.1</protobuf.version>
     </properties>
 
     <modules>
@@ -311,7 +312,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>3.25.1</version> <!-- 版本可换 -->
+                <version>${protobuf.version}</version> <!-- 版本可换 -->
             </dependency>
             <dependency>
                 <groupId>com.lmax</groupId>
@@ -347,6 +348,13 @@
 
             </plugins>
         </pluginManagement>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.0</version>
+            </extension>
+        </extensions>
     </build>
 
 </project>
