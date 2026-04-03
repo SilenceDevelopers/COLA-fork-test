@@ -9,6 +9,7 @@ import com.alibaba.demo.dto.StockQuery;
 import com.alibaba.demo.dto.StockReduceCmd;
 import com.alibaba.demo.response.ApiResponse;
 import com.alibaba.fastjson.JSON;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,13 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/stock")
+@RequiredArgsConstructor
 public class StockController {
 
-    @Autowired
-    private StockService stockService;
+    private final StockService stockService;
 
-    @Autowired
-    private CustomerServiceI customerServiceI;
+    private final CustomerServiceI customerServiceI;
 
     @PostMapping("/getDetailById")
     public String getDetailById(@RequestBody StockDetailQueryCmd cmd) {

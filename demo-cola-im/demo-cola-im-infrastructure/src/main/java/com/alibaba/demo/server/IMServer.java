@@ -3,6 +3,7 @@ package com.alibaba.demo.server;
 import com.alibaba.demo.constant.Constants;
 import com.alibaba.demo.handler.NettyServerHandler;
 import com.alibaba.demo.monitor.NettyDirectMemoryMetrics;
+import com.alibaba.demo.mq.RocketMQConsumer;
 import com.alibaba.demo.utils.IOUtil;
 import com.alibaba.demo.utils.NodeUtil;
 import com.alibaba.demo.zookeeper.ServerNode;
@@ -28,6 +29,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.FutureListener;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -39,6 +41,7 @@ import java.net.InetSocketAddress;
 @Data
 @ConfigurationProperties(prefix = "netty.config")
 @Slf4j
+@RequiredArgsConstructor
 public class IMServer {
 
     private int port;
@@ -50,19 +53,17 @@ public class IMServer {
     private EventLoopGroup workGroup;
     private Class<? extends ServerChannel> serverChannel;
 
-    @Autowired
-    private NettyServerHandler nettyServerHandler;
+    private final NettyServerHandler nettyServerHandler;
 
-    @Autowired
-    private ZKService zkService;
+    private final ZKService zkService;
 
-    @Autowired
-    private NettyDirectMemoryMetrics nettyDirectMemoryMetrics;
+    private final NettyDirectMemoryMetrics nettyDirectMemoryMetrics;
 
     private PrometheusMeterRegistry prometheusRegistry;
 
-    @Autowired
-    private IMServerInitializer imServerInitializer;
+    private final IMServerInitializer imServerInitializer;
+
+    private final RocketMQConsumer rocketMQConsumer;
 
     public void run() {
         initGroup();
@@ -88,6 +89,7 @@ public class IMServer {
                 log.info("本地节点, path={}, id={}", pathRegistered, serverNode.getId());
                 ServerWorker.instance().setServerNode(serverNode);
                 ServerRouterWorker.instance().init();
+                rocketMQConsumer.init();
                 exposure();
                 nettyDirectMemoryMetrics.init();
             } else {

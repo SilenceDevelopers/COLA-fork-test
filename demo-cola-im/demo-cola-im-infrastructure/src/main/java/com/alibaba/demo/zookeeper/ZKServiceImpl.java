@@ -21,7 +21,7 @@ public class ZKServiceImpl implements ZKService {
 
     @Override
     public String createPersistentNode(String path) throws Exception {
-        return curatorFramework.create().creatingParentContainersIfNeeded().withProtection().withMode(CreateMode.PERSISTENT).forPath(path);
+        return curatorFramework.create().creatingParentContainersIfNeeded().withProtection().withMode(CreateMode.EPHEMERAL).forPath(path);
     }
 
     @Override

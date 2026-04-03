@@ -17,6 +17,10 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<HelloProto.M
     @Autowired
     private MessageDispatcher dispatcher;
 
+    public NettyServerHandler(MessageDispatcher dispatcher){
+        this.dispatcher = dispatcher;
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HelloProto.MessageWrapper msg) throws Exception {
         String cmd = msg.getCmd();

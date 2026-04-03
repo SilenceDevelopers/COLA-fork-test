@@ -26,10 +26,9 @@
         <!--        <spring-boot.version>2.7.2</spring-boot.version>-->
         <spring-boot.version>3.3.0</spring-boot.version>
         <mybatis-starter.version>2.2.2</mybatis-starter.version>
-        <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
-        <!--    <spring-boot.version>2.6.0</spring-boot.version>-->
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <spring-cloud-alibaba.version>2023.0.3.3</spring-cloud-alibaba.version>
+        <spring-cloud.version>2023.0.9</spring-cloud.version>
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <druid.version>1.2.9</druid.version>
         <mysql.connector.version>8.0.33</mysql.connector.version>
         <autotable.core.version>3.5.4-EXT544-boot3</autotable.core.version>
@@ -38,6 +37,7 @@
         <seata.version>2.2.0</seata.version>
         <snakeyaml.version>2.2</snakeyaml.version>
         <protobuf.version>3.6.1</protobuf.version>
+        <akka.version>2.6.20</akka.version>
     </properties>
 
     <modules>
@@ -90,10 +90,10 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
@@ -203,7 +203,7 @@
             <!--            </dependency>-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <!--Project modules-->
@@ -269,13 +269,13 @@
                 <version>1.2.83</version>
             </dependency>
             <!-- Misc End -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--                <version>${spring-cloud.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -318,6 +318,19 @@
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>3.4.2</version> <!-- Use the latest version available -->
+            </dependency>
+            <!-- Akka Actor Typed -->
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-actor-typed_2.13</artifactId>
+                <version>${akka.version}</version>
+            </dependency>
+
+            <!-- Akka SLF4J (日志) -->
+            <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-slf4j_2.13</artifactId>
+                <version>${akka.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

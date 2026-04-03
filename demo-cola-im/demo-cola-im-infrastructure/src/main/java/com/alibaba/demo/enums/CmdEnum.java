@@ -12,8 +12,9 @@ public enum CmdEnum {
 
     HEART(HelloProto.Cmd.HEARTBEAT.name().toLowerCase(), HelloProto.Cmd.HEARTBEAT.getNumber(), HelloProto.Heartbeat.class),
     LOGIN(HelloProto.Cmd.LOGIN.name().toLowerCase(), HelloProto.Cmd.LOGIN.getNumber(), HelloProto.LoginRequest.class),
-    CHAT(HelloProto.Cmd.CHAT.name().toLowerCase(),HelloProto.Cmd.CHAT.getNumber(),HelloProto.ChatMessage.class),
-    CONNECTED(HelloProto.Cmd.CONNECTED.name().toLowerCase(), HelloProto.Cmd.CONNECTED.getNumber(),HelloProto.ServerPeerConnected.class);
+    CHAT(HelloProto.Cmd.CHAT.name().toLowerCase(), HelloProto.Cmd.CHAT.getNumber(), HelloProto.ChatMessage.class),
+    CONNECTED(HelloProto.Cmd.CONNECTED.name().toLowerCase(), HelloProto.Cmd.CONNECTED.getNumber(), HelloProto.ServerPeerConnected.class),
+    MOVE(HelloProto.Cmd.MOVE.name().toLowerCase(), HelloProto.Cmd.MOVE_VALUE, HelloProto.Move.class);
 
     private final String name;
     private final int protoCode;
@@ -28,16 +29,16 @@ public enum CmdEnum {
     private static final Map<Class<?>, String> map = new HashMap<>();
 
     static {
-        for (CmdEnum cmdEnum : CmdEnum.values()){
-            map.put(cmdEnum.messageClass,cmdEnum.getName());
+        for (CmdEnum cmdEnum : CmdEnum.values()) {
+            map.put(cmdEnum.messageClass, cmdEnum.getName());
         }
     }
 
-    public static Map<Class<?>, String> getMap(){
+    public static Map<Class<?>, String> getMap() {
         return map;
     }
 
-    public static String getCmd(Class<?> clazz){
+    public static String getCmd(Class<?> clazz) {
         return map.get(clazz);
     }
 }

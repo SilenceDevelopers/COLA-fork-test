@@ -8,6 +8,7 @@ enum Cmd{
   LOGIN = 2;
   CHAT = 3;
   CONNECTED = 4;
+  MOVE = 5;
 }
 
 message MessageWrapper {
@@ -30,10 +31,33 @@ message ChatMessage {
 }
 
 message Heartbeat {
-  string clientId = 1;
+  int64 clientId = 1;
   int64 clientTime = 2;
 }
 
 message ServerPeerConnected{
   int64 timestamp = 1;
+}
+
+message Move {
+  oneof payload {
+    MoveReq req = 1;
+    MoveResp resp = 2;
+  }
+}
+
+message MoveReq{
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message MoveResp{
+  int64 playerId = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
+
+// 错误消息
+message ErrorMsg {
+  string error = 1;
 }

@@ -19,6 +19,8 @@ public class ServerNode implements Serializable {
 
     private Integer weight = 0;
 
+    private String serviceName;
+
     public ServerNode(String host, Integer port) {
         this.host = host;
         this.port = port;
