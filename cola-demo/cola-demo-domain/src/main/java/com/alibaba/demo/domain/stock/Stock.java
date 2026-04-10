@@ -16,4 +16,6 @@ public class Stock {
     private Integer num;
 
     private Integer version;
+
+    private String des;
 }

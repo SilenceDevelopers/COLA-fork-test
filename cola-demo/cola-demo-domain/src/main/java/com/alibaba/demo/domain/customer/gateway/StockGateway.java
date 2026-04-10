@@ -13,4 +13,6 @@ public interface StockGateway {
     Integer reduceStock(Stock stock);
 
     IPage<Stock> getStockPage(Page<Stock> page, StockQuery query);
+
+    Stock getDetailById(Long id);
 }

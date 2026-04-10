@@ -6,6 +6,7 @@ import com.alibaba.demo.dto.StockReduceCmd;
 import com.alibaba.demo.dubbo.api.OrderServiceApi;
 import com.alibaba.demo.dubbo.dto.AddOrderDTO;
 import com.alibaba.demo.stock.executor.assembler.StockAssembler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.rpc.RpcContext;
@@ -16,12 +17,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class StockReduceExe {
 
-    @Autowired
-    private StockGateway stockGateway;
+    private final StockGateway stockGateway;
 
-    @DubboReference
+    @DubboReference(protocol = "dubbo")
     private OrderServiceApi orderServiceApi;
 
     @GlobalTransactional

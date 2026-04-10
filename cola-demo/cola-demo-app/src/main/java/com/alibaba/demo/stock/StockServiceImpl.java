@@ -7,26 +7,30 @@ import com.alibaba.demo.dto.StockDetailQueryCmd;
 import com.alibaba.demo.dto.StockQuery;
 import com.alibaba.demo.dto.StockReduceCmd;
 import com.alibaba.demo.dto.vo.StockVO;
+import com.alibaba.demo.dubbo.dto.ShardingOrderDTO;
+import com.alibaba.demo.order.OrderServiceExe;
 import com.alibaba.demo.page.PageResult;
 import com.alibaba.demo.page.PageUtils;
+import com.alibaba.demo.response.ApiResponse;
 import com.alibaba.demo.stock.executor.StockReduceExe;
 import com.alibaba.demo.stock.executor.query.StockDetailQueryExe;
 import com.alibaba.demo.struct.StockStructMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
-    @Autowired
-    private StockDetailQueryExe stockDetailQueryExe;
-    @Autowired
-    private StockReduceExe stockReduceExe;
-    @Autowired
-    private StockStructMapper stockStructMapper;
+
+    private final StockDetailQueryExe stockDetailQueryExe;
+    private final StockReduceExe stockReduceExe;
+    private final StockStructMapper stockStructMapper;
+    private final OrderServiceExe orderServiceExe;
 
     @Override
     public String getDetail(StockDetailQueryCmd cmd) {
@@ -48,5 +52,10 @@ public class StockServiceImpl implements StockService {
 
         // 3. 转换为自定义的 PageResult（使用之前的 PageUtils）
         return PageUtils.toPageResult(userPage, stockStructMapper::toVO);
+    }
+
+    @Override
+    public List<ShardingOrderDTO> getOrder() {
+        return orderServiceExe.getOrderList();
     }
 }

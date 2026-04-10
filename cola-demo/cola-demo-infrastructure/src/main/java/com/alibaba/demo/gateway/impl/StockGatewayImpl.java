@@ -7,14 +7,15 @@ import com.alibaba.demo.dto.StockQuery;
 import com.alibaba.demo.mapper.StockMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class StockGatewayImpl implements StockGateway {
 
-    @Autowired
-    private StockMapper stockMapper;
+    private final StockMapper stockMapper;
 
     @Override
     public Stock getDetail(StockDetailQueryCmd cmd) {
@@ -29,5 +30,10 @@ public class StockGatewayImpl implements StockGateway {
     @Override
     public IPage<Stock> getStockPage(Page<Stock> page, StockQuery query) {
         return stockMapper.getStockPage(page, query);
+    }
+
+    @Override
+    public Stock getDetailById(Long id) {
+        return stockMapper.getDetailById(id);
     }
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "com.alibaba.demo.dubbo.grpc.api";
+option java_outer_classname = "StockServiceProto";
+
+service StockService {
+  rpc GetStock (GetStockRequest) returns (StockResponse) {}
+}
+
+message GetStockRequest {
+  int64 id = 1;
+}
+
+message StockResponse {
+  int64 id = 1;
+  string name = 2;
+  int32 num = 3;
+  string des = 4;
+}

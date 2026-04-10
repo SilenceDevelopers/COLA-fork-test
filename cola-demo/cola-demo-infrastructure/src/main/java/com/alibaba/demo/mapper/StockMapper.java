@@ -21,4 +21,7 @@ public interface StockMapper extends BaseMapper<Stock> {
 
     @Select("select * from stock order by id desc")
     IPage<Stock> getStockPage(Page<?> page, @Param("query") StockQuery query);
+
+    @Select("select * from stock where id = #{id}")
+    Stock getDetailById(@Param("id") Long id);
 }

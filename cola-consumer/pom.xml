@@ -38,6 +38,7 @@
         <seata.version>2.2.0</seata.version>
         <snakeyaml.version>2.2</snakeyaml.version>
         <pagehelper.version>1.4.7</pagehelper.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     </properties>
 
     <modules>
@@ -131,6 +132,19 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.2.0</version>
+        </dependency>
+        <!-- MapStruct 核心库 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+        <!-- MapStruct 注解处理器（用于编译时生成实现类） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${org.mapstruct.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

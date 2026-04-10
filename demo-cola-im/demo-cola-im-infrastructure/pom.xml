@@ -99,8 +99,8 @@
                 <version>0.6.1</version>
                 <configuration>
                     <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</pluginArtifact>
+<!--                    <pluginId>grpc-java</pluginId>-->
+<!--                    <pluginArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</pluginArtifact>-->
                     <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>
                 </configuration>
                 <executions>
@@ -112,18 +112,18 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>kr.motd.maven</groupId>-->
-<!--                <artifactId>os-maven-plugin</artifactId>-->
-<!--                <version>1.7.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>detect</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>detect</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

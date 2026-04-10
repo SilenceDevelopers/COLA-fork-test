@@ -5,7 +5,10 @@ import com.alibaba.demo.dto.StockDetailQueryCmd;
 import com.alibaba.demo.dto.StockQuery;
 import com.alibaba.demo.dto.StockReduceCmd;
 import com.alibaba.demo.dto.vo.StockVO;
+import com.alibaba.demo.dubbo.dto.ShardingOrderDTO;
 import com.alibaba.demo.page.PageResult;
+
+import java.util.List;
 
 public interface StockService {
 
@@ -14,4 +17,6 @@ public interface StockService {
     Response reduceStock(StockReduceCmd cmd);
 
     PageResult<StockVO> getStockPage(StockQuery query);
+
+    List<ShardingOrderDTO> getOrder();
 }

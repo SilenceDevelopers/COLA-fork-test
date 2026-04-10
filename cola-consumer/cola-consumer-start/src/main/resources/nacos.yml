@@ -1,0 +1,110 @@
+server:
+  port: 8093
+  servlet:
+    context-path: /cola-consumer/
+
+dubbo:
+  application: #当前这个应用的信息
+    name: cola-consumer #应用名
+    qos-port: 22223
+  protocol: # 服务采用的协议 基本默认未dubbo协议(netty)
+    name: dubbo
+    port: 20881 #dubbo服务暴露的端口
+  registry: #注册相关信息
+    #address: zookeeper://10.250.204.106:2181 #注册中心配置
+    address: nacos://192.168.78.201:8848 #注册中心配置
+    timeout: 30000 # 到注册中心的超时时间
+    namespace: xhcc
+    group: xunheng-cloud-cola
+    username: nacos
+    password: nacos
+  provider:
+    retries: -1 #重试次数 consumer
+    delay: -1 #延迟到spring容器加载之后
+    filter: seataFilter, sentinel
+  scan: #需要发布的服务接口实现类扫描路径
+    base-packages: com.alibaba.demo.dubbo.api.impl
+  consumer:
+    check: false
+    filter: sentinel
+
+  # spring:
+  #   # 数据源
+  #   datasource:
+  #     type: com.alibaba.druid.pool.DruidDataSource
+  #     driver-class-name: com.mysql.cj.jdbc.Driver
+  #     url: jdbc:mysql://192.168.78.201:3306/tb_order?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  #     username: root
+  #     password: 123456
+  # cloud:
+  #   alibaba:
+  #     seata:
+  #       tx-service-group: default
+spring:
+  # elasticsearch:
+  #   uris: http://192.168.78.201:9200
+  cloud:
+    sentinel:
+      enabled: true
+      transport:
+        dashboard: 192.168.78.201:8858
+        port: 8719
+        clientIp: 192.168.1.5
+      eager: true
+      dubbo:
+        provider:
+          enable: true
+        consumer:
+          enable: true
+
+elasticsearch:
+  uri: 192.168.78.201
+  port: 9200
+  scheme: http
+  enabled: false
+  username: elastic
+  password: 123456
+
+snowflake:
+  workerId: 3
+  datacenterId: ${WORKER_ID:4}
+
+uid:
+  timeBits: 30             # 时间位, 默认:30
+  workerBits: 16           # 机器位, 默认:16
+  seqBits: 7               # 序列号, 默认:7
+  epochStr: "2019-02-20"   # 初始时间, 默认:"2019-02-20"
+  enableBackward: true    # 是否容忍时钟回拨, 默认:true
+  maxBackwardSeconds: 1    # 时钟回拨最长容忍时间（秒）, 默认:1
+  CachedUidGenerator:     # CachedUidGenerator相关参数
+    boostPower: 3          # RingBuffer size扩容参数, 可提高UID生成的吞吐量, 默认:3
+    paddingFactor: 50      # 指定何时向RingBuffer中填充UID, 取值为百分比(0, 100), 默认为50
+    #scheduleInterval: 60    # 默认:不配置此项, 即不使用Schedule线程. 如需使用, 请指定Schedule线程时间间隔, 单位:秒
+
+seata:
+  registry: # TC服务注册中心的配置，微服务根据这些信息去注册中心获取tc服务地址
+    type: nacos # 注册中心类型 nacos
+    nacos:
+      server-addr: 192.168.78.201:8848 # nacos地址
+      namespace: seata # namespace，默认为空
+      group: SEATA_GROUP # 分组，默认是DEFAULT_GROUP
+      application: seata-server # seata服务名称
+      username: nacos
+      password: nacos
+  tx-service-group: default # 事务组名称
+  service:
+    vgroup-mapping: # 事务组与tc集群的映射关系
+      default: "default"
+  data-source-proxy-mode: AT
+  enable: true
+  enable-auto-data-source-proxy: false
+
+pagehelper:
+  helperDialect: mysql  # 设置数据库类型，如 mysql、oracle、mariadb 等
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+sharding:
+  databaseCount: 1
+  tableCount: 4

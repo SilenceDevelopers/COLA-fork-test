@@ -1,0 +1,126 @@
+server:
+  port: 8094
+  servlet:
+    context-path: /cola-im
+
+zookeeper:
+  address: 192.168.1.3:2181
+  baseSleepTimeMs: 1000
+  maxRetries: 3
+
+socketio:
+  # socketio请求地址
+  host: 192.168.78.1
+  # socketio端口
+  port: 8195
+  # 设置最大每帧处理数据的长度，防止他人利用大数据来攻击服务器
+  maxFramePayloadLength: 1048576
+  # 设置http交互最大内容长度
+  maxHttpContentLength: 1048576
+  # socket连接数大小（如只监听一个端口boss线程组为1即可）
+  bossCount: 1
+  # 连接数大小
+  workCount: 100
+  # 允许客户请求
+  allowCustomRequests: true
+  # 协议升级超时时间（毫秒），默认10秒。HTTP握手升级为ws协议超时时间
+  upgradeTimeout: 1000000
+  # Ping消息超时时间（毫秒），默认60秒，这个时间间隔内没有接收到心跳消息就会发送超时事件
+  pingTimeout: 6000000
+  # Ping消息间隔（毫秒），默认25秒。客户端向服务器发送一条心跳消息间隔
+  pingInterval: 25000
+  # 命名空间，多个以逗号分隔，
+  namespaces: /,/test,/socketIO
+  #namespaces: /socketIO
+
+spring:
+  # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.78.201:3306/store?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  data:
+    redis:
+      cluster:
+        nodes:
+          - 192.168.78.201:6379
+          - 192.168.78.201:6380
+          - 192.168.78.201:6381
+          - 192.168.78.201:6382
+          - 192.168.78.201:6383
+          - 192.168.78.201:6384
+        max-redirects: 3
+      password: 123456
+      timeout: 10s
+      lettuce:
+        pool:
+          max-active: 200
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 0
+        cluster:
+          refresh:
+            adaptive: true
+            period: 2000
+
+redisson:
+  cluster-servers-config:
+    node-addresses:
+      - redis://192.168.78.201:6379
+      - redis://192.168.78.201:6380
+      - redis://192.168.78.201:6381
+      - redis://192.168.78.201:6382
+      - redis://192.168.78.201:6383
+      - redis://192.168.78.201:6384
+    scan-interval: 2000
+    password: 123456
+
+netty:
+  config:
+    port: 9000
+    useLinuxNativeEpoll: false
+    bossCount: 1
+    workCoung: 2
+
+thread:
+  pool:
+    corePoolSize: 8
+    maxPoolSize: 16
+    queueCapacity: 200
+    keepAliveSeconds: 60
+    threadNamePrefix: biz-exec-
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: prometheus,health,info
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+
+groups:
+  - name: netty-memory-alerts
+    rules:
+      - alert: NettyDirectMemoryHigh
+        expr: netty_direct_memory_kb > (io_netty_maxDirectMemory / 1024 * 0.8)
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Netty direct memory usage is high"
+          description: "Netty direct memory usage is above 80% of the configured max."
+
+rocketmq:
+  name-server: 192.168.78.201:9876
+
+im:
+  node:
+    id: ${IM_NODE_ID:default-node}
+
+

@@ -1,6 +1,6 @@
 package com.alibaba.demo.fallback;
 
-import com.alibaba.csp.sentinel.adapter.dubbo.fallback.DubboFallback;
+import com.alibaba.csp.sentinel.adapter.dubbo3.fallback.DubboFallback;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
