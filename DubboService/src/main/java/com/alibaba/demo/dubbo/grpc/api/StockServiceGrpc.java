@@ -1,5 +1,8 @@
 package com.alibaba.demo.dubbo.grpc.api;
 
+import io.grpc.MethodDescriptor;
+import io.grpc.stub.annotations.RpcMethod;
+
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
@@ -15,26 +18,26 @@ public final class StockServiceGrpc {
   private static volatile io.grpc.MethodDescriptor<com.alibaba.demo.dubbo.grpc.api.GetStockRequest,
       com.alibaba.demo.dubbo.grpc.api.StockResponse> getGetStockMethod;
 
-  @io.grpc.stub.annotations.RpcMethod(
+  @RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetStock",
-      requestType = com.alibaba.demo.dubbo.grpc.api.GetStockRequest.class,
-      responseType = com.alibaba.demo.dubbo.grpc.api.StockResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.alibaba.demo.dubbo.grpc.api.GetStockRequest,
-      com.alibaba.demo.dubbo.grpc.api.StockResponse> getGetStockMethod() {
-    io.grpc.MethodDescriptor<com.alibaba.demo.dubbo.grpc.api.GetStockRequest, com.alibaba.demo.dubbo.grpc.api.StockResponse> getGetStockMethod;
+      requestType = GetStockRequest.class,
+      responseType = StockResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<GetStockRequest,
+      StockResponse> getGetStockMethod() {
+    MethodDescriptor<GetStockRequest, StockResponse> getGetStockMethod;
     if ((getGetStockMethod = StockServiceGrpc.getGetStockMethod) == null) {
       synchronized (StockServiceGrpc.class) {
         if ((getGetStockMethod = StockServiceGrpc.getGetStockMethod) == null) {
           StockServiceGrpc.getGetStockMethod = getGetStockMethod =
-              io.grpc.MethodDescriptor.<com.alibaba.demo.dubbo.grpc.api.GetStockRequest, com.alibaba.demo.dubbo.grpc.api.StockResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              MethodDescriptor.<GetStockRequest, StockResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetStock"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.alibaba.demo.dubbo.grpc.api.GetStockRequest.getDefaultInstance()))
+                  GetStockRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.alibaba.demo.dubbo.grpc.api.StockResponse.getDefaultInstance()))
+                  StockResponse.getDefaultInstance()))
               .setSchemaDescriptor(new StockServiceMethodDescriptorSupplier("GetStock"))
               .build();
         }
